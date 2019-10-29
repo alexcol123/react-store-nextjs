@@ -1,10 +1,15 @@
 import { Menu, Container, Image, Icon } from 'semantic-ui-react';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
+import Router, { useRouter } from 'next/router';
+import NProgress from 'nprogress';
+
+Router.onRouteChangeStart = () => NProgress.start();
+Router.onRouteChangeComplete = () => NProgress.done();
+Router.onRouteChangeErrot = () => NProgress.done();
 
 function Header() {
   const router = useRouter();
-  const user = false;
+  const user = true;
 
   function isActive(route) {
     return route === router.pathname;
