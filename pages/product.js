@@ -1,14 +1,12 @@
 import axios from 'axios';
 import ProductSummary from '../components/Product/ProductSummary';
-//import ProductAttributes from "../components/Product/ProductAttributes";
+import ProductAttributes from '../components/Product/ProductAttributes';
 
 function Product({ product }) {
-  console.log(product)
   return (
     <>
-      product
-      {/* <ProductSummary {...product} />
-      <ProductAttributes {...product} /> */}
+      <ProductSummary {...product} />
+      <ProductAttributes {...product} />
     </>
   );
 }
