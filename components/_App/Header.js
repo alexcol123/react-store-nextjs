@@ -5,18 +5,19 @@ import NProgress from 'nprogress';
 
 Router.onRouteChangeStart = () => NProgress.start();
 Router.onRouteChangeComplete = () => NProgress.done();
-Router.onRouteChangeErrot = () => NProgress.done();
+Router.onRouteChangeError = () => NProgress.done();
 
-function Header() {
+function Header({ user }) {
   const router = useRouter();
-  const user = false;
+
+  console.log(user);
 
   function isActive(route) {
     return route === router.pathname;
   }
 
   return (
-    <Menu  stackable fluid id="menu" inverted>
+    <Menu stackable fluid id="menu" inverted>
       <Container text>
         <Link href="/">
           <Menu.Item header active={isActive('/')}>
