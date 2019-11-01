@@ -1,9 +1,9 @@
-import App from "next/app";
-import Layout from "../components/_App/Layout";
-import { parseCookies } from "nookies";
-import { redirectUser } from "../utils/auth";
-import baseUrl from "../utils/baseUrl";
-import axios from "axios";
+import App from 'next/app';
+import Layout from '../components/_App/Layout';
+import { parseCookies, destroyCookie } from 'nookies';
+import { redirectUser } from '../utils/auth';
+import baseUrl from '../utils/baseUrl';
+import axios from 'axios';
 
 class MyApp extends App {
   static async getInitialProps({ Component, ctx }) {
@@ -17,9 +17,9 @@ class MyApp extends App {
 
     if (!token) {
       const isProtectedRoute =
-        ctx.pathname === "/account" || ctx.pathname === "/create";
+        ctx.pathname === '/account' || ctx.pathname === '/create';
       if (isProtectedRoute) {
-        redirectUser(ctx, "/login");
+        redirectUser(ctx, '/login');
       }
     } else {
       try {
@@ -29,7 +29,11 @@ class MyApp extends App {
         const user = response.data;
         pageProps.user = user;
       } catch (error) {
-        console.error("Error getting current user", error);
+        console.error('Error getting current user', error);
+        // 1 Throw out invalid token
+        destroyCookie(ctx, 'token');
+        // 2 redirect to login
+        redirectUser(ctx, '/login');
       }
     }
 
