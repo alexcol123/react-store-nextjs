@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 
 import { Form, Segment, Button, Icon, Message } from 'semantic-ui-react';
 import Link from 'next/link';
-import catcErrors from '../utils/catchErrors';
 import catchErrors from '../utils/catchErrors';
+import baseUrl from '../utils/baseUrl';
+import axios from 'axios';
+import { handleLogin } from '../utils/auth';
 
 const INITIAL_USER = {
-
   email: '',
   password: ''
 };
@@ -32,8 +33,11 @@ function Signup() {
     try {
       setLoading(true);
       setError('');
-      console.log(user);
-      // Make request to signup a user
+
+      const url = `${baseUrl}/api/login`;
+      const payload = { ...user };
+      const response = await axios.post(url, payload);
+      handleLogin(response.data)
     } catch (error) {
       catchErrors(error, setError);
     } finally {
@@ -55,8 +59,6 @@ function Signup() {
         <Message error header="Opps" content={error} />
 
         <Segment>
-
-
           <Form.Input
             fluid
             icon="envelope"
@@ -97,8 +99,7 @@ function Signup() {
         </Link>{' '}
         instead.
       </Message>
-
-</>
+    </>
   );
 }
 
