@@ -1,4 +1,5 @@
 import Product from '../../models/Product';
+import Cart from '../../models/Cart';
 import connectDb from '../../utils/connectDb';
 
 connectDb();
@@ -51,7 +52,20 @@ async function handlePostRequest(req, res) {
 
 async function handleDeleteRequest(req, res) {
   const { _id } = req.query;
+  try {
+    //1 Delete Product by ID
 
-  await Product.findOneAndDelete({ _id });
-  res.status(204).json({});
+    await Product.findOneAndDelete({ _id });
+    // 2 Remove product from all carts, reference as 'products;
+    await Cart.updateMany(
+      { 'products.product': _id },
+      {
+        $pull: { products: { product: _id } }
+      }
+    );
+    res.status(204).json({});
+  } catch (error) {
+    console.log(error);
+    res.status(500).send('Error deleting product');
+  }
 }
